@@ -60,12 +60,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 # CORS settings
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",  # Replace with your frontend URL
-#     "http://127.0.0.1:3000",
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Replace with your frontend URL
+    "http://127.0.0.1:3000",
+    "https://stripe-payment-ive6.onrender.com",
+    "http://localhost:8081",
+    "exp://192.168.0.102:8081"
     
-#     # Add more origins as needed or use "*" to allow all origins
-# ]
+    # Add more origins as needed or use "*" to allow all origins
+]
 
 CORS_ALLOW_ALL_ORIGINS = True  # Uncomment to allow all origins
 

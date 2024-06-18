@@ -28,7 +28,7 @@ STRIPE_SECRET=config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["stripe-payment-ive6.onrender.com"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -63,6 +63,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Replace with your frontend URL
     "http://127.0.0.1:3000",
+    "http://localhost:5173",
     "https://stripe-payment-ive6.onrender.com",
     "http://localhost:8081",
     "exp://192.168.0.102:8081"

@@ -21,17 +21,14 @@ class CreateStripeLoad(
 ):
     queryset=Product.objects.all()
     serializer_class=ProductSerializer
-    permission_classes=[IsAuthenticated]
-    def get_queryset(self, *args, **kwargs):
-        user=self.request.user
-        return Product.objects.filter(user=user)
+    
+    
     def create(self, request, *args, **kwargs):
-        user=self.request.user
         data=JSONParser().parse(request)
         serializer=ProductSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
 
-            if user:
+            
                 try:
                     starter_subscription = stripe.Product.create(
                     name=data["name"],
@@ -81,8 +78,7 @@ class CreateStripeLoad(
                     return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                         
                         
-            else:
-                return Response({"status":"error", "message":"error creating stripe product"})
+         
         else:
             return Response({"status":"error","message":str(serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)
 

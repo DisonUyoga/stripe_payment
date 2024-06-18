@@ -15,5 +15,5 @@ headers={
 }
 
 reply_data={"name":"pizza", "description":"testing", "price": 1200, "quantity":5}
-response=requests.post(endpoint, json=reply_data, headers=headers)
+response=requests.post(endpoint, json=reply_data)
 print(response.json())

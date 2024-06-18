@@ -1,7 +1,7 @@
 from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, ListModelMixin, RetrieveModelMixin
-from .models import Product
+from .models import Payment
 from rest_framework import viewsets
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, PaymentSerializer
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
@@ -19,48 +19,26 @@ class CreateStripeLoad(
     RetrieveModelMixin,
     viewsets.GenericViewSet
 ):
-    queryset=Product.objects.all()
-    serializer_class=ProductSerializer
+    queryset=Payment.objects.all()
+    serializer_class=PaymentSerializer
     
     
     def create(self, request, *args, **kwargs):
         data=JSONParser().parse(request)
-        print(data)
-        serializer=ProductSerializer(data=data)
+       
+        serializer=PaymentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
 
             
                 try:
-                    starter_subscription = stripe.Product.create(
-                    name=data["name"],
-                    description=data["description"],)
-               
-                    if starter_subscription.id:
                     
-                            starter_subscription_price = stripe.Price.create(
-                            unit_amount=data["price"],
-                            currency="usd",
-                            recurring=None,
-                            product=starter_subscription['id'],
-                            )
-                            print(starter_subscription_price)
-                            if starter_subscription_price.id:
-                                checkout_session=stripe.checkout.Session.create(
-                                    line_items=[
-                                        {
-                                            'price': starter_subscription_price.id,
-                                            'quantity': data["quantity"],
-                                        },
-                                    ],
-                                    mode='payment',
-                                    success_url="http://localhost" + '/?success=true',
-                                    cancel_url="http://localhost" + '/?success=false',
-                                )
-                               
-                        
-                                return Response(checkout_session, status=status.HTTP_200_OK)
-                            else:
-                                return Response({"status":"error","message":"error establishing payment"})
+                     intent = stripe.PaymentIntent.create(
+                    amount=data["amount"],  # amount in cents
+                    currency='usd',
+                    metadata={'integration_check': 'accept_a_payment'},
+                    )
+                     return Response({"client secret": intent["client_secret"]}, status=status.HTTP_200_OK)
+                    
                 except stripe.error.CardError as e:
                     body = e.json_body
                     err = body.get('error', {})

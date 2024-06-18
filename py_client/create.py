@@ -8,12 +8,12 @@ data={
     "password":"disonnnnnnn123"
 }
 
-token=requests.post(token_endpoint, json=data).json()["token"]
+# token=requests.post(token_endpoint, json=data).json()["token"]
 
-headers={
-    "Authorization": f"Token {token}"
-}
+# headers={
+#     "Authorization": f"Token {token}"
+# }
 
-reply_data={"name":"pizza", "description":"testing", "price": 1200, "quantity":5}
-response=requests.post(endpoint, json=reply_data)
+reply_data={"user":"mzae","name":"pizza", "description":"testing", "price": 1200, "quantity":5}
+response=requests.post(endpoint, json=reply_data,)
 print(response.json())

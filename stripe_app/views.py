@@ -25,6 +25,7 @@ class CreateStripeLoad(
     
     def create(self, request, *args, **kwargs):
         data=JSONParser().parse(request)
+        print(data)
         serializer=ProductSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
 
@@ -42,7 +43,7 @@ class CreateStripeLoad(
                             recurring=None,
                             product=starter_subscription['id'],
                             )
-                       
+                            print(starter_subscription_price)
                             if starter_subscription_price.id:
                                 checkout_session=stripe.checkout.Session.create(
                                     line_items=[
@@ -57,7 +58,7 @@ class CreateStripeLoad(
                                 )
                                
                         
-                                return Response({"status":"success","message":"payment success"}, status=status.HTTP_200_OK)
+                                return Response(checkout_session, status=status.HTTP_200_OK)
                             else:
                                 return Response({"status":"error","message":"error establishing payment"})
                 except stripe.error.CardError as e:

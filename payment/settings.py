@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)hm-g5$ilwm$wh1&y)zdab@h!9#^+^&28^_b%q$^loo5$8nb2!
 STRIPE_SECRET=config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["stripe-payment-ive6.onrender.com"]
 ADMIN_URL = '/admin/' 

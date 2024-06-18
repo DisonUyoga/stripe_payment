@@ -26,9 +26,10 @@ SECRET_KEY = 'django-insecure-)hm-g5$ilwm$wh1&y)zdab@h!9#^+^&28^_b%q$^loo5$8nb2!
 STRIPE_SECRET=config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["stripe-payment-ive6.onrender.com"]
+ADMIN_URL = '/admin/' 
 
 
 # Application definition
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
+    'stripe_app.middleware.AdminCsrfExemptMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -61,12 +63,9 @@ MIDDLEWARE = [
 ]
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Replace with your frontend URL
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
+    
     "https://stripe-payment-ive6.onrender.com",
-    "http://localhost:8081",
-    "exp://192.168.0.102:8081"
+    
     
     # Add more origins as needed or use "*" to allow all origins
 ]

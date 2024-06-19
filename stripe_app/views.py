@@ -33,9 +33,9 @@ class CreateStripeLoad(
                     user=Payment.objects.filter(user=data["user"])
                     if not user:
                         customer = stripe.Customer.create(
-                                email='customer@example.com',
-                                name='Customer Name',
-                                description='Customer for example@example.com',
+                                email=data["user"],
+                                name=data["user"],
+                                description='Customer for' + data["user"],
                                 payment_method='pm_card_visa'  # Optional
                             )
                     payment=Payment.objects.create(user=data["user"],amount=data["amount"])

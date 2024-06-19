@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.conf import settings
 import stripe
-
+import uuid
 stripe.api_key=settings.STRIPE_SECRET
 print(settings.STRIPE_SECRET)
 
@@ -25,11 +25,19 @@ class CreateStripeLoad(
     
     def create(self, request, *args, **kwargs):
         data=JSONParser().parse(request)
-       
+        print(data["user_id"])
         serializer=PaymentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
                 
                 try:
+                    user=Payment.objects.filter(user=data["user"])
+                    if not user:
+                        customer = stripe.Customer.create(
+                                email='customer@example.com',
+                                name='Customer Name',
+                                description='Customer for example@example.com',
+                                payment_method='pm_card_visa'  # Optional
+                            )
                     payment=Payment.objects.create(user=data["user"],amount=data["amount"])
                     intent = stripe.PaymentIntent.create(
                     amount=data["amount"],  # amount in cents
@@ -37,11 +45,8 @@ class CreateStripeLoad(
                     metadata={'integration_check': 'accept_a_payment'},
                     )
                     # creating stripe customer
-                    user=Payment.objects.filter(user=data["user"])
-                    if not user:
-                        stripe.customer.create({
-                            
-                        })
+                    
+                    print(customer.id)
                     return Response({"client_secret": intent["client_secret"],  **PaymentSerializer(payment).data}, status=status.HTTP_200_OK)
                     
                 except stripe.error.CardError as e:

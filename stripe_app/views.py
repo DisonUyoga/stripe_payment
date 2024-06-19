@@ -25,7 +25,7 @@ class CreateStripeLoad(
     
     def create(self, request, *args, **kwargs):
         data=JSONParser().parse(request)
-        print(data["user_id"])
+     
         serializer=PaymentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
                 

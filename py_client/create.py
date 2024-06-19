@@ -14,6 +14,6 @@ data={
 #     "Authorization": f"Token {token}"
 # }
 
-reply_data={"user":"Dison", "amount": 5000, "user_id":4}
+reply_data={"user":"disonobudho233@gmail.com", "amount": 5000}
 response=requests.post(endpoint, json=reply_data,)
 print(response.json())

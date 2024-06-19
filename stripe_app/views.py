@@ -28,8 +28,7 @@ class CreateStripeLoad(
        
         serializer=PaymentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-
-            
+                
                 try:
                     payment=Payment.objects.create(user=data["user"],amount=data["amount"])
                     intent = stripe.PaymentIntent.create(
@@ -37,6 +36,12 @@ class CreateStripeLoad(
                     currency='usd',
                     metadata={'integration_check': 'accept_a_payment'},
                     )
+                    # creating stripe customer
+                    user=Payment.objects.filter(user=data["user"])
+                    if not user:
+                        stripe.customer.create({
+                            
+                        })
                     return Response({"client_secret": intent["client_secret"],  **PaymentSerializer(payment).data}, status=status.HTTP_200_OK)
                     
                 except stripe.error.CardError as e:

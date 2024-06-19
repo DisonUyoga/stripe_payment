@@ -45,6 +45,7 @@ class CreateStripeLoad(
                     intent = stripe.PaymentIntent.create(
                     amount=data["amount"],  # amount in cents
                     currency='usd',
+                    customer=customerId.customer_id,
                     metadata={'integration_check': 'accept_a_payment'},
                     )
                     # creating stripe customer

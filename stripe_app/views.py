@@ -50,7 +50,7 @@ class CreateStripeLoad(
                     # creating stripe customer
                     
                     
-                    return Response({"client_secret": intent["client_secret"],  **PaymentSerializer(payment).data}, status=status.HTTP_200_OK)
+                    return Response({"client_secret": intent["client_secret"],  **PaymentSerializer(payment).data,"customerId":customerId.customer_id}, status=status.HTTP_200_OK)
                     
                 except stripe.error.CardError as e:
                     body = e.json_body

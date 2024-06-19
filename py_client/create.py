@@ -15,5 +15,5 @@ data={
 # }
 
 reply_data={"user":"Dison", "amount": 5000}
-response=requests.post(endpoint, json=reply_data,)
+response=requests.get(endpoint, json=reply_data,)
 print(response.json())

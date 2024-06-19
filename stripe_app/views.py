@@ -31,13 +31,13 @@ class CreateStripeLoad(
 
             
                 try:
-                    
-                     intent = stripe.PaymentIntent.create(
+                    Payment.objects.create(user=data["user"],amount=data["amount"])
+                    intent = stripe.PaymentIntent.create(
                     amount=data["amount"],  # amount in cents
                     currency='usd',
                     metadata={'integration_check': 'accept_a_payment'},
                     )
-                     return Response({"client_secret": intent["client_secret"]}, status=status.HTTP_200_OK)
+                    return Response({"client_secret": intent["client_secret"]}, status=status.HTTP_200_OK)
                     
                 except stripe.error.CardError as e:
                     body = e.json_body

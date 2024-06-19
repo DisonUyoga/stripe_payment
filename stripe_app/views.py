@@ -28,7 +28,7 @@ class CreateStripeLoad(
      
         serializer=PaymentSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
-                
+                ephemeral_key=""
                 try:
                     
                     user=Payment.objects.filter(user=data["user"])
@@ -39,7 +39,12 @@ class CreateStripeLoad(
                                 description='Customer for' + data["user"],
                                 payment_method='pm_card_visa'  # Optional
                             )
-                        Customer.objects.create(user=data["user"], customer_id=customer.id)
+                        ephemeral_key = stripe.EphemeralKey.create(
+                                    customer=customer.id,
+                                    stripe_version="2020-08-27"
+                                )
+                        print(ephemeral_key)
+                        Customer.objects.create(user=data["user"], customer_id=customer.id, ephemeral_key=ephemeral_key.id)
                     customerId=Customer.objects.get(user=data["user"])
                     payment=Payment.objects.create(user=data["user"],amount=data["amount"], customer_id=customerId)
                     intent = stripe.PaymentIntent.create(
@@ -51,7 +56,7 @@ class CreateStripeLoad(
                     # creating stripe customer
                     
                     
-                    return Response({"client_secret": intent["client_secret"],  **PaymentSerializer(payment).data,"customerId":customerId.customer_id}, status=status.HTTP_200_OK)
+                    return Response({"client_secret": intent["client_secret"],"key":customerId.ephemeral_key ,  **PaymentSerializer(payment).data,"customerId":customerId.customer_id, }, status=status.HTTP_200_OK)
                     
                 except stripe.error.CardError as e:
                     body = e.json_body

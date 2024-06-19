@@ -13,6 +13,7 @@ class Product(models.Model):
 class Customer(models.Model):
     user=models.CharField(max_length=255)
     customer_id=models.CharField(max_length=255)
+    ephemeral_key=models.CharField(max_length=255, default="")
 
 class Payment(models.Model):
     user=models.CharField(max_length=255)

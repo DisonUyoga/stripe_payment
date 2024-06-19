@@ -28,7 +28,7 @@ STRIPE_SECRET=config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["stripe-payment-ive6.onrender.com"]
+ALLOWED_HOSTS = ['stripe-payment-ive6.onrender.com']
 ADMIN_URL = '/admin/' 
 
 

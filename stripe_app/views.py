@@ -37,7 +37,7 @@ class CreateStripeLoad(
                     currency='usd',
                     metadata={'integration_check': 'accept_a_payment'},
                     )
-                    return Response({"client_secret": intent["client_secret"], data: PaymentSerializer(payment).data}, status=status.HTTP_200_OK)
+                    return Response({"client_secret": intent["client_secret"],  **PaymentSerializer(payment).data}, status=status.HTTP_200_OK)
                     
                 except stripe.error.CardError as e:
                     body = e.json_body

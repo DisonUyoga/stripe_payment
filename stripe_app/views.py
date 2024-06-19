@@ -1,5 +1,5 @@
 from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, ListModelMixin, RetrieveModelMixin
-from .models import Payment
+from .models import Payment, Customer
 from rest_framework import viewsets
 from .serializers import ProductSerializer, PaymentSerializer
 from rest_framework.parsers import JSONParser
@@ -30,15 +30,18 @@ class CreateStripeLoad(
         if serializer.is_valid(raise_exception=True):
                 
                 try:
+                    
                     user=Payment.objects.filter(user=data["user"])
                     if not user:
                         customer = stripe.Customer.create(
-                                email=data["user"],
+                                email="dison233@gmail.com",
                                 name=data["user"],
                                 description='Customer for' + data["user"],
                                 payment_method='pm_card_visa'  # Optional
                             )
-                    payment=Payment.objects.create(user=data["user"],amount=data["amount"])
+                        Customer.objects.create(user=data["user"], customer_id=customer.id)
+                    customerId=Customer.objects.get(user=data["user"])
+                    payment=Payment.objects.create(user=data["user"],amount=data["amount"], customer_id=customerId)
                     intent = stripe.PaymentIntent.create(
                     amount=data["amount"],  # amount in cents
                     currency='usd',
@@ -46,7 +49,7 @@ class CreateStripeLoad(
                     )
                     # creating stripe customer
                     
-                    print(customer.id)
+                    
                     return Response({"client_secret": intent["client_secret"],  **PaymentSerializer(payment).data}, status=status.HTTP_200_OK)
                     
                 except stripe.error.CardError as e:

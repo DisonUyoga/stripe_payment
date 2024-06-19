@@ -1,10 +1,12 @@
 from django.contrib import admin
-from .models import Product, Payment
+from .models import Product, Payment, Customer
 # Register your models here.
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display=("id","name","price", "quantity", "created_at")
+
 
 @admin.register(Payment)
 class ProductAdmin(admin.ModelAdmin):
-    list_display=("user", "amount")
+    list_display=("user", "amount", "customer_id")
+
+@admin.register(Customer)
+class ProductAdmin(admin.ModelAdmin):
+    list_display=("user", "customer_id")
